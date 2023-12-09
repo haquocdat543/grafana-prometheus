@@ -112,7 +112,7 @@ cat << EOF | sudo tee -a /etc/prometheus/prometheus.yml
   - job_name: 'jenkins'
     metrics_path: '/prometheus'
     static_configs:
-	- targets: ['localhost:8080']
+      - targets: ["localhost:8080"]
 EOF
 promtool check config /etc/prometheus/prometheus.yml
 curl -X POST http://localhost:9090/-/reload
