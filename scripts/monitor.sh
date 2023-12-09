@@ -88,7 +88,7 @@ cat << EOF | sudo tee -a /etc/prometheus/prometheus.yml
           - targets: ["localhost:9100"]
 EOF
 promtool check config /etc/prometheus/prometheus.yml
-
+curl -X POST http://localhost:9090/-/reload
 
 # Grafana
 sudo apt-get install -y apt-transport-https software-properties-common
@@ -98,6 +98,5 @@ sudo apt-get update -y
 sudo apt-get -y install grafana
 sudo systemctl enable grafana-server
 sudo systemctl start grafana-server
-
 
 hostnamectl set-hostname Monitor
