@@ -1,5 +1,18 @@
 #!/bin/bash
 
+# Install Openjdk and Jenkins
+sudo apt update -y
+wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | tee /etc/apt/keyrings/adoptium.asc
+echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list
+sudo apt update -y
+sudo apt install temurin-17-jdk -y
+/usr/bin/java --version
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update -y
+sudo apt-get install jenkins -y
+sudo systemctl start jenkins
+
 # Prometheus
 sudo useradd \
     --system \
@@ -98,5 +111,14 @@ sudo apt-get update -y
 sudo apt-get -y install grafana
 sudo systemctl enable grafana-server
 sudo systemctl start grafana-server
+
+cat << EOF | sudo tee -a /etc/prometheus/prometheus.yml
+  - job_name: 'jenkins'
+    metrics_path: '/prometheus'
+        static_configs:
+	      - targets: ['localhost:8080']
+EOF
+promtool check config /etc/prometheus/prometheus.yml
+curl -X POST http://localhost:9090/-/reload
 
 hostnamectl set-hostname Monitor
