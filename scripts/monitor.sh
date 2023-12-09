@@ -45,7 +45,6 @@ WantedBy=multi-user.target
 EOF
 sudo systemctl enable prometheus
 sudo systemctl start prometheus
-journalctl -u prometheus -f --no-pager
 
 # Node Exporter
 sudo useradd \
@@ -82,7 +81,6 @@ WantedBy=multi-user.target
 EOF
 sudo systemctl enable node_exporter
 sudo systemctl start node_exporter
-journalctl -u node_exporter -f --no-pager
 
 cat << EOF | sudo tee -a /etc/prometheus/prometheus.yml
   - job_name: node_export

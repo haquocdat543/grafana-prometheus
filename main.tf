@@ -51,32 +51,16 @@ resource "aws_route_table_association" "a" {
   subnet_id      = aws_subnet.JenkinsSubnet.id
   route_table_id = aws_route_table.ProdRouteTable.id
 }
-# Create Security Group to allow port 22, 80, 443
+# Create Security Group to allow all port
 resource "aws_security_group" "JenkinsSecurityGroup" {
   name        = "JenkinsSecurityGroup"
   description = "Allow SSH ,HTTPS , Jenkins, Sonarqube, React"
   vpc_id      = aws_vpc.jenkins-vpc.id
 
   ingress {
-    from_port        = 22
-    to_port          = 22
-    protocol         = "TCP"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  ingress {
-    from_port        = 8080
-    to_port          = 8080
-    protocol         = "TCP"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  ingress {
-    from_port        = 9000
-    to_port          = 9000
-    protocol         = "TCP"
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
