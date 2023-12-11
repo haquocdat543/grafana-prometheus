@@ -37,6 +37,27 @@ Enter your `key pair` name. If you dont have create one. [keypair](https://docs.
 
 Outputs:
 ```
+Monitor-Server = "ssh -i ~/Window2.pem ubuntu@35.73.249.175"
 ```
+### 3. Config grafana-prometheus server
+Copy `<your-server-public-ip>:9090/targets` to check health
 
+Copy `<your-server-public-ip>:3000` to access grafana
+
+Login with default `username` and `password` is `admin`
+
+Then update to new password
+
+Navigate to `Home` > `Connection` > `Prometheus` > `Add new data soures` 
+
+Prometheus server url : <your-server-url> in my case it is `localhost:9090` > `Save and Test`
+
+Navigate to `Home` > `Dashboard` > `Plug sign ( top right corner )` > `Imoort dashboard`
+
+Find and import... : 1860 > `Load` > Select `Prometheus` > `Import`
+
+### 4. Destroy
+```
+terraform destroy --auto-approve
+```
 
